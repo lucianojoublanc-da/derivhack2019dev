@@ -22,16 +22,16 @@ For bots to run on the cloud, they **must** use the [DAZL API](https://github.co
 
 The local stack will consists of:
 1. Microsoft Visual Studio Code IDE (Recommended) for DAML, Python editing. You will need the following extensions:
-  - DAML
-  - Microsoft Python
+    - DAML
+    - Microsoft Python
 2. [DAML SDK](https://docs.daml.com/getting-started/installation.html#install-the-sdk) for
-  - Creating a skeleton project `daml new`. Modify `daml.yaml` and `daml/Main.daml` as necessary. Start the IDE with `daml studio`.
-  - Compiling DAML files to `*.dar` archives from IDE, or alternatively `daml build`, which generates them under `.daml/dist/`.
-  - Running the local ledger with `daml sandbox`. Alternatively, scenarios can be tested from the IDE ("view scenario results" hyperlink above code).
+    - Creating a skeleton project `daml new`. Modify `daml.yaml` and `daml/Main.daml` as necessary. Start the IDE with `daml studio`.
+    - Compiling DAML files to `*.dar` archives from IDE, or alternatively `daml build`, which generates them under `.daml/dist/`.
+    - Running the local ledger with `daml sandbox`. Alternatively, scenarios can be tested from the IDE ("view scenario results" hyperlink above code).
 3. APIs
-  - [DAZL](https://github.com/digital-asset/dazl-client), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
+    - [DAZL](https://github.com/digital-asset/dazl-client), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
   Please also note that this is not properly documented right now; this should be fixed over the coming weeks.
-  - [REST](https://docs.projectdabl.com/#apicontracts_get) TBC - Currently this is not publicly available locally and/or fully documented. There is no local equivalent. Be aware that an updated version of the API is in the works, which is yet to be integrated into DABL. More info forthcoming.
+    - [REST](https://docs.projectdabl.com/#apicontracts_get) TBC - Currently this is not publicly available locally and/or fully documented. There is no local equivalent. Be aware that an updated version of the API is in the works, which is yet to be integrated into DABL. More info forthcoming.
 
 ## Hosted Dev
 
