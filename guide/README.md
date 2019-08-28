@@ -31,7 +31,7 @@ The local stack will consists of:
 3. APIs
     - [DAZL](https://github.com/digital-asset/dazl-client), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
   Please also note that this is not properly documented right now; this should be fixed over the coming weeks.
-    - [REST](https://docs.projectdabl.com/#apicontracts_get) TBC - Currently this is not publicly available locally and/or fully documented. There is no local equivalent. Be aware that an updated version of the API is in the works, which is yet to be integrated into DABL. More info forthcoming.
+    - [REST](https://docs.projectdabl.com/#apicontracts_get) This is WIP. Currently the local equivalent of this is not available, and/or fully documented. Be aware that an updated version of the API is in the works, which is yet to be integrated into DABL. More info forthcoming.
 
 ## Hosted Dev
 
@@ -40,7 +40,7 @@ If you have followed the previous steps, you should be able to painlessly deploy
 1. Go to [https://projectdabl.com](https://projectdabl.com) and sign-up for an account.
 2. Create a new project (DerivHack2019) and ledger (staging).
 3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
-4. Press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
+4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
 5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
 
 Please bear in mind that, until further notice, we do not provide an SLA for the hosted environment, and it may be wiped at any time. It is currently managed out of NY. Having said this, I understand they have nearly met their goals of 99% uptime last quarter.
