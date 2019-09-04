@@ -61,5 +61,7 @@ If you have followed the previous steps, you should be able to painlessly deploy
 3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
 4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
 5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
+6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication).
+7. To enable your python/DAZL based automation processes, go to your DABL dashboard "Automation" tab, and drag-and-drop your `*.py` files.
 
 Please bear in mind that, until further notice, we do not provide an SLA for the hosted environment, and it may be wiped at any time. It is currently managed out of NY. Having said this, I understand they have nearly met their goals of 99% uptime last quarter.
