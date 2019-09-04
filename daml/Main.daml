@@ -1,0 +1,42 @@
+-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+-- This file contains a subset of the FIX 5 protocol/schema.
+
+daml 1.2
+module Main where
+
+template AllocationInstruction 
+  with 
+    allocID: ContractId
+    allocTransType: AllocTransType
+    allocType: ???
+    instrument: Instrument
+    avgPx: Decimal
+    quantity: Int
+    tradeDate: Date
+    settlDate: Date
+
+data AllocTransType = New | Cancel | Replace
+
+template AllocGrp
+  with
+    allocAccount: Text
+    allocPrice: Decimal
+    allocQty: Int
+    nestedParties: nestedParties
+    --commissionData: CommissionData
+    --allocAvgPrice
+    allocNetMoney: Decimal
+    allocSettlCurrAmt: Decimal
+    allocSettlCurr: Text
+    --miscFeesGrp: MiscFeesGrp
+    --settlInstructionsData: SettlInstructionsData
+
+data NestedParties = NestedParties with
+  nestedPartyId: Text
+  nestedPartyIdSource: Text
+  nestedPartyRole: NestedPartyRole
+  
+data NestedPartyRole = ExecutingFirm | ClientID
+
+--setup = scenario do
