@@ -2,6 +2,13 @@
 -- SPDX-License-Identifier: Apache-2.0
 
 -- This file contains a subset of the FIX 5 protocol/schema.
+--
+-- Note repeating groups are handles as follows:
+-- * They are represented as lists in the data types.
+-- * The leading NoXXX field is implicit in the size of the list, and is 
+--   omitted from the body.
+--
+-- Enumerations are represented as data union types.
 
 daml 1.2
 module Fix5 where
@@ -10,21 +17,35 @@ module Fix5 where
 
 data AllocationInstruction =
   AllocationInstruction with 
-    allocID: ContractId AllocationInstruction
+    allocID: Text
     allocTransType: AllocTransType
     allocType: AllocType
+    refAllocID: Optional Text
+    allocCancReplaceReason: Optional Text
+    ordAllocGrp: [OrdAllocGrp]
     side: Side
     instrument: Instrument
     avgPx: Decimal
     quantity: Int
     tradeDate: Date
     settlDate: Date
+    allocGrp: [AllocGrp]
+--    ensure (allocTransType == New || 
+--           not (refAllocID.isEmpty || allocCancReplaceReason.isEmpty) ) &&
+--           quantity === sum (fmap (\a -> q.quantity) allocGrp
 
 data AllocTransType = New | Cancel | Replace
 
 data AllocType = Calculated | Preliminary | ReadyToBook | Warehouse
 
 data Side = Buy | Sell
+
+data OrdAllocGrp = OrdAllocGrp with
+  clOrdID: Text
+  nestedParties: NestedParties -- Note field names are actually Nested2Parties as duplicate field names not allowed.
+  orderQty: Int
+  orderAvgPx: Decimal
+  orderBookingQty: Int
 
 data AllocGrp = 
   AllocGrp with
@@ -50,8 +71,8 @@ data Instrument =
 
 data NestedParties = 
   NestedParties with
-    nestedPartyId: Text
-    nestedPartyIdSource: Text
+    nestedPartyID: Text
+    nestedPartyIDSource: Text
     nestedPartyRole: NestedPartyRole
   
 data NestedPartyRole = ExecutingFirm | ClientID
