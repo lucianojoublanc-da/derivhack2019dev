@@ -1,8 +1,123 @@
 -- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
 -- SPDX-License-Identifier: Apache-2.0
--- This file contains a subset of the FIX 5 protocol/schema.
+
+{- Throughout this model we assume that `Party`s on the ledger
+   correspond to LEI party identifiers in the FIX messages.
+ -}
 
 daml 1.2
 module Main where
 
---setup = scenario do
+import Fix5
+import DA.List
+import DA.Record
+import DA.Optional
+import DA.Date
+
+-- Represents a completed allocation workflow
+-- As it has multiple signatories it must be composed by embedding sub-contracts
+template BilateralAllocation
+  with 
+    initiator: Party
+    instruction: AllocationInstruction
+    responder: Party
+    affirmation: AllocationInstructionAck
+  where
+    ensure [ initiator ] == gatherParties ClientID instruction.allocGrp &&
+           [ responder ] == gatherParties ExecutingFirm [affirmation]
+    signatory [ initiator, responder ]
+               
+
+-- Use to initate workflows
+template ProposeBilateralAllocation
+  with
+    initiator: Party
+    instruction: AllocationInstruction
+    responder: Party
+  where
+    signatory initiator
+    controller responder can
+      Affirm: ContractId BilateralAllocation
+        do 
+          create BilateralAllocation with
+            initiator
+            instruction 
+            responder
+            affirmation = AllocationInstructionAck with
+              allocID = show self
+              parties = instruction.allocGrp >>= (.parties)
+              allocStatus = Accepted
+              matchStatus = Compared
+              allocAckGrp = []
+      Reject: ContractId BilateralAllocation
+        with rejects: [ AllocAckGrp ]
+        do 
+          create BilateralAllocation with
+            initiator
+            instruction
+            responder
+            affirmation = AllocationInstructionAck with
+              allocID = show self
+              parties = instruction.allocGrp >>= (.parties) --FIXME this should align wiht rejects
+              allocStatus = BlockLevelReject
+              matchStatus = Compared
+              allocAckGrp = []
+
+-- Extracts unique parties from a list of records with field `parties`.
+gatherParties : HasField "parties" r [Parties] => 
+  PartyRole -> [r] -> [Party]
+gatherParties role msgs = dedup sigs
+  where 
+    sigs = do
+      msg <- msgs
+      party <- msg.parties
+      _ <- guard (party.partyRole == role) 
+      optionalToList (partyFromText party.partyID)
+      
+
+setup = scenario do
+  client <- getParty "client"
+  broker <- getParty "broker"
+  allocId <- submit client do 
+    create ProposeBilateralAllocation with
+      initiator = client
+      responder = broker
+      instruction = AllocationInstruction with
+        allocID = "" 
+        allocTransType = New 
+        allocType = Preliminary 
+        refAllocID = None
+        allocCancReplaceReason = None
+        ordAllocGrp = []
+        side = Buy
+        instrument = Instrument with
+          symbol = "BARC"
+          securityID = "GB0031348658"
+          securityIDSource = "ISIN"
+        avgPx = 140.52
+        quantity = 100_000
+        tradeDate = date 2019 Sep 6
+        settlDate = date 2019 Sep 10
+        allocGrp = 
+          [
+            AllocGrp with
+              allocAccount = "Account1"
+              allocPrice = 140.52 -- GBX
+              allocQty = 100_000
+              parties = 
+                [
+                  Parties with
+                    partyID = "client" 
+                    partyIDSource = "LEI" 
+                    partyRole = ClientID 
+                  ,
+                  Parties with
+                    partyID = "broker" 
+                    partyIDSource = "LEI" 
+                    partyRole = ExecutingFirm
+                ]
+              allocNetMoney = 14_052_000.0 -- GBX
+              allocSettlCurrAmt = 140_520.0
+              allocSettlCurr = "GBP"
+          ]
+  submit broker do exercise allocId Affirm
