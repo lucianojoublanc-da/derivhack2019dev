@@ -1,7 +1,7 @@
 sdk-version: 0.13.21
 name: demo
 source: daml/Main.daml
-scenario: Main:setup
+scenario: Scenarios:setup
 parties:
   - client
   - broker
