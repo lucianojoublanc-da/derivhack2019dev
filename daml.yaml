@@ -3,8 +3,8 @@ name: demo
 source: daml/Main.daml
 scenario: Main:setup
 parties:
-  - Alice
-  - Bob
+  - client
+  - broker
 version: 0.0.1
 dependencies:
   - daml-prim
