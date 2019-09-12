@@ -14,6 +14,15 @@ import DA.Record
 import DA.Optional
 import DA.Date
 
+template Execution
+  with
+    report: ExecutionReport
+    broker: Party
+  where
+    ensure [ broker ] == gatherParties ExecutingFirm [ report ]
+    signatory broker
+    observer gatherParties ClientID [ report ]
+
 -- Represents a completed allocation workflow
 -- As it has multiple signatories it must be composed by embedding sub-contracts
 template BilateralAllocation

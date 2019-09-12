@@ -13,6 +13,24 @@
 daml 1.2
 module Fix5 where
 
+-- Orders/Executions -------------------------------------------
+
+-- This is a really cut-down version of the actual message
+data ExecutionReport =
+  ExecutionReport with
+    orderID: Text
+    parties: [Parties]
+    ordStatus: OrdStatus
+    tradeDate: Date
+    -- lastPx: Decimal
+    -- lastQty: Int
+    avgPx: Decimal
+    cumQty: Int
+  deriving (Eq, Show)
+
+data OrdStatus = DoneForDay | Filled
+  deriving (Eq, Show)
+
 -- Allocations -------------------------------------------------
 
 data AllocationInstruction =
@@ -58,11 +76,11 @@ data MatchStatus = Compared | Uncompared | AdvisoryOrAlert | Mismatched
 
 data OrdAllocGrp = 
   OrdAllocGrp with
-    clOrdID: Text
-    parties: [Parties]
-    orderQty: Int
-    orderAvgPx: Decimal
-    orderBookingQty: Int
+    orderID: Text
+    -- parties: [Parties]
+    -- orderQty: Int
+    -- orderAvgPx: Decimal
+    -- orderBookingQty: Int
   deriving (Eq, Show)
 
 data AllocGrp = 
