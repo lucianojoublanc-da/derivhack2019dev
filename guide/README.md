@@ -31,7 +31,7 @@ The local stack will consists of:
 3. APIs
     - [DAZL](https://github.com/lucianojoublanc-da/dazl-client)  ([api docs](https://lucianojoublanc-da.github.io/dazl-client)), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see point 2 in previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
   Please also note that this is not properly documented right now; this should be fixed over the coming weeks.
-    - [Official SDK REST API](https://github.com/digital-asset/daml/tree/master/ledger-service/http-json), for performing I/O with outside world. This will [eventually](https://github.com/digital-asset/daml/issues/2043) be part of the DAML sdk and run as `daml http-json`, but for the time being it is a stand-alone binary, available [here](./http-json-bin_deploy.jar). You can use the process locally like so: 
+    - [Official SDK REST API](https://github.com/digital-asset/daml/tree/master/ledger-service/http-json), for performing I/O with the outside world. You can use the process locally like so (make sure you have SDK version >= 0.13.***23***): 
 
 ```sh
 # Create & compile a new DAML project
@@ -41,7 +41,7 @@ daml new demo && cd demo && daml build
 daml sandbox --ledgerid MyLedger .daml/dist/demo.dar --scenario Main:setup &
 
 # Start the REST adapter
-java -jar http-json-bin_deploy.jar localhost 6865 7575  &
+daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575 &
 
 # Bearer token generated as per the "official SDK REST API" readme (see above for link).
 curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWRnZXJJZCI6Ik15TGVkZ2VyIiwiYXBwbGljYXRpb25JZCI6ImZvb2JhciIsInBhcnR5IjoiQWxpY2UifQ.4HYfzjlYr1ApUDot0a6a4zB49zS_jrwRUOCkAiPMqo0" http://localhost:7575/contracts/search
@@ -59,7 +59,7 @@ If you have followed the previous steps, you should be able to painlessly deploy
 3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
 4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
 5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
-6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication). Note that, the current version of the REST API **is being updated to the official REST API** and should be available in the next few weeks.
+6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication). Note that, the current version of the DABL REST API **is being updated to the official REST API** and should be available in the next few weeks.
 7. To enable your python/DAZL based automation processes, go to your DABL dashboard "Automation" tab, and drag-and-drop your `*.py` files.
 
 Please bear in mind that, until further notice, we do not provide an SLA for the hosted environment, and it may be wiped at any time. It is currently managed out of NY. Having said this, I understand they have nearly met their goals of 99% uptime last quarter.

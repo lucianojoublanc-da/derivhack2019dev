@@ -1,5 +1,5 @@
-sdk-version: 0.13.21
-name: demo
+sdk-version: 0.13.23
+name: ui
 source: daml/Main.daml
 scenario: Scenarios:setup
 parties:
