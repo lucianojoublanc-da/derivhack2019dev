@@ -22,6 +22,7 @@ data ExecutionReport =
     parties: [Parties]
     ordStatus: OrdStatus
     tradeDate: Date
+    -- instrument: Instrument
     -- lastPx: Decimal
     -- lastQty: Int
     avgPx: Decimal

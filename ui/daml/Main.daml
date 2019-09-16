@@ -29,6 +29,8 @@ template ProposeBilateralAllocation
     instruction: AllocationInstruction
     responder: Party
   where
+    ensure [ initiator ] == gatherParties ClientID instruction.allocGrp &&
+           [ responder ] == gatherParties ExecutingFirm instruction.allocGrp
     signatory initiator
     controller responder can
       Affirm: ContractId BilateralAllocation
@@ -41,7 +43,8 @@ template ProposeBilateralAllocation
               allocID = show self
               parties = instruction.allocGrp >>= (.parties)
               allocStatus = Accepted
-              matchStatus = Compared
+              matchStatus = 
+                if instruction.allocType == Preliminary then Compared else AdvisoryOrAlert
               allocAckGrp = []
       Reject: ContractId BilateralAllocation
         with rejects: [ AllocAckGrp ]
@@ -70,7 +73,7 @@ template BilateralAllocation
            [ responder ] == gatherParties ExecutingFirm [affirmation]
     signatory [ initiator, responder ]
 
--- Extracts unique parties from a list of records with field `parties`.
+-- Extracts unique parties from a list of records `r` with field `parties`.
 gatherParties : HasField "parties" r [Parties] => 
   PartyRole -> [r] -> [Party]
 gatherParties role msgs = dedup sigs
