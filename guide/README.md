@@ -93,13 +93,13 @@ with open('CDM.json') as metadataRaw:
 
 ## Putting it all together
 
-We have provided two sample programs in this repo that correspond to items #2 and #3 in the diagram above.
+We have provided two sample programs in this repo that correspond to items #2 and #3, #4 in the diagram above.
 
-  * [A Python Jupyter Notebook](../ui/python/ui.ipynb) that serves as a rudimentary UI. You will need [BeakerX](http://beakerx.com/documentation) installed to get the UI controls working. The example includes a DAML model for allocations using the FIX 5 protocol; note these ***are different from the CDM hackathon workflows***.
+  2. [A Python Jupyter Notebook](../ui/python/ui.ipynb) that serves as a rudimentary UI. You will need [BeakerX](http://beakerx.com/documentation) installed to get the UI controls working. The example includes a DAML model for allocations using the FIX 5 protocol; note these ***are different from the CDM hackathon workflows***.
 
-  * [A Python trigger](../bot/python/readyToBookTrigger.py). Once started, it checks for new `Execution` contracts every 3 seconds, and submits new `Allocation` contracts in response. The workflow can be run independently from the aforementioned notebook.
+  3. [A Python trigger](../bot/python/readyToBookTrigger.py). Once started, it checks for new `Execution` contracts every 3 seconds, and submits new `Allocation` contracts in response. The workflow can be run independently from the aforementioned notebook.
 
-  * [A CDM JSON converter](../cdm/main.py), which encodes a trade event from a file, round-trips it to the ledger, and decodes the resulting contract, checking there are no differences.
+  4. [A CDM JSON converter](../cdm/main.py), which encodes a trade event from a file, round-trips it to the ledger, and decodes the resulting contract, checking there are no differences.
 
 ## Hosted Dev
 
