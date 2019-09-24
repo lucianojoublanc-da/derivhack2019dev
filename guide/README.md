@@ -50,6 +50,20 @@ curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWRnZXJJ
 # {"status":200,"result":[{"offset":"","workflowId":"scenario-workflow-2","activeContracts":[{"agreementText":"","contractId":"#2:1","templateId":{"packageId":"276b293a46d9ad9d20a2acbb59f2ea2ccca14dba0340faefdc233246a1b1a326","moduleName":"Main","entityName":"Asset"},"witnessParties":["Alice"],"argument":{"issuer":"Alice","owner":"Alice","name":"TV"}}]},{"offset":"3","activeContracts":[]}]}
 ```
 
+## Hosted Dev
+
+If you have followed the previous steps, you should be able to painlessly deploy your app into the DABL cloud:
+
+1. Go to [https://projectdabl.com](https://projectdabl.com) and sign-up for an account.
+2. Create a new project (DerivHack2019) and ledger (staging).
+3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
+4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
+5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
+6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication). Note that, the current version of the DABL REST API **is being updated to the official REST API** and should be available in the next few weeks.
+7. To enable your python/DAZL based automation processes, go to your DABL dashboard "Automation" tab, and drag-and-drop your `*.py` files.
+
+Please bear in mind that, until further notice, we do not provide an SLA for the hosted environment, and it may be wiped at any time. It is currently managed out of NY. Having said this, I understand they have nearly met their goals of 99% uptime last quarter.
+
 ## Working with the CDM schema
 
 During the Hackathon, you will be expected to ingest JSON files following the CDM schema. It's important to understand that the JSON representation of the CDM does not match the DAML representation one-to-one. There are subtle differences in how certain elements are encoded, including timestamps, enumerations, and arity. For example, the `EventTimestamp` element of `Event` differs like so:
@@ -93,24 +107,10 @@ with open('CDM.json') as metadataRaw:
 
 ## Putting it all together
 
-We have provided two sample programs in this repo that correspond to items #2 and #3, #4 in the diagram above.
+We have provided two sample programs in this repo that correspond to items #2 and #3, #4 in the diagram.
 
   2. [A Python Jupyter Notebook](../ui/python/ui.ipynb) that serves as a rudimentary UI. You will need [BeakerX](http://beakerx.com/documentation) installed to get the UI controls working. The example includes a DAML model for allocations using the FIX 5 protocol; note these ***are different from the CDM hackathon workflows***.
 
   3. [A Python trigger](../bot/python/readyToBookTrigger.py). Once started, it checks for new `Execution` contracts every 3 seconds, and submits new `Allocation` contracts in response. The workflow can be run independently from the aforementioned notebook.
 
   4. [A CDM JSON converter](../cdm/main.py), which encodes a trade event from a file, round-trips it to the ledger, and decodes the resulting contract, checking there are no differences.
-
-## Hosted Dev
-
-If you have followed the previous steps, you should be able to painlessly deploy your app into the DABL cloud:
-
-1. Go to [https://projectdabl.com](https://projectdabl.com) and sign-up for an account.
-2. Create a new project (DerivHack2019) and ledger (staging).
-3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
-4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
-5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
-6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication). Note that, the current version of the DABL REST API **is being updated to the official REST API** and should be available in the next few weeks.
-7. To enable your python/DAZL based automation processes, go to your DABL dashboard "Automation" tab, and drag-and-drop your `*.py` files.
-
-Please bear in mind that, until further notice, we do not provide an SLA for the hosted environment, and it may be wiped at any time. It is currently managed out of NY. Having said this, I understand they have nearly met their goals of 99% uptime last quarter.
