@@ -31,7 +31,7 @@ The local stack will consists of:
 3. APIs
     - [DAZL](https://github.com/lucianojoublanc-da/dazl-client)  ([api docs](https://lucianojoublanc-da.github.io/dazl-client)), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see point 2 in previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
   Please also note that this is not properly documented right now; this should be fixed over the coming weeks.
-    - [Official SDK REST API](https://github.com/digital-asset/daml/tree/master/ledger-service/http-json), for performing I/O with the outside world. For a full example, see the [ui notebook](../ui/python/ui.ipynb). Alternatively, you can test the process locally like so (make sure you have SDK version >= 0.13.***23***): 
+    - [Official SDK REST API](https://github.com/digital-asset/daml/tree/master/ledger-service/http-json), for performing I/O with the outside world.  Alternatively, you can test the process locally like so (make sure you have SDK version >= 0.13.***23***): 
 
 ```sh
 # Create & compile a new DAML project
@@ -49,6 +49,57 @@ curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWRnZXJJ
 # Http 200 response:
 # {"status":200,"result":[{"offset":"","workflowId":"scenario-workflow-2","activeContracts":[{"agreementText":"","contractId":"#2:1","templateId":{"packageId":"276b293a46d9ad9d20a2acbb59f2ea2ccca14dba0340faefdc233246a1b1a326","moduleName":"Main","entityName":"Asset"},"witnessParties":["Alice"],"argument":{"issuer":"Alice","owner":"Alice","name":"TV"}}]},{"offset":"3","activeContracts":[]}]}
 ```
+
+## Working with the CDM schema
+
+During the Hackathon, you will be expected to ingest JSON files following the CDM schema. It's important to understand that the JSON representation of the CDM does not match the DAML representation one-to-one. There are subtle differences in how certain elements are encoded, including timestamps, enumerations, and arity. For example, the `EventTimestamp` element of `Event` differs like so:
+
+```
+== CDM ==                                                     == DAML via HTTP/JSON ==
+
+{                                                               {
+    "timestamp": [                                                  "timestamp": [
+        {                                                               {
+            "dateTime": "2018-03-20T18:13:51Z",               |             "dateTime": {
+            "qualification": "EVENT_CREATION_DATE_TIME"       |                 "dateTime": "2018-03-20T18:13:51Z",
+                                                              >                 "timezone": "UTC"
+                                                              >             },
+                                                              >             "qualification": "EventTimestampQualificationEnum
+        }                                                               }
+    ]                                                               ]
+}                                                               }
+```
+
+For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../cdm) subdirectory of this repo. Essentially it boils down to this:
+
+```python
+import json
+from message_integration.metadata.cdm.cdmMetaDataReader import CdmMetaDataReader
+from message_integration.metadata.damlTypes import Record
+from message_integration.strategies.jsonCdmDecodeStrategy import JsonCdmDecodeStrategy
+from message_integration.strategies.jsonCdmEncodeStrategy import JsonCdmEncodeStrategy
+
+with open('CDM.json') as metadataRaw:
+
+  # Load meta-data used for translation
+  metadata = CdmMetaDataReader().fromJSON(json.load(metadataRaw))
+
+  # Decode json to match http-json-api
+  outJsonDict = JsonCdmDecodeStrategy(metadata).decode(inJsonDict, Record("Event"))
+
+  # Encode
+  inJsonDict = JsonCdmEncodeStrategy(metadata).encode(outJsonDict, Record("Event"))
+```
+
+## Putting it all together
+
+We have provided two sample programs in this repo that correspond to items #2 and #3 in the diagram above.
+
+  * [A Python Jupyter Notebook](../ui/python/ui.ipynb) that serves as a rudimentary UI. You will need [BeakerX](http://beakerx.com/documentation) installed to get the UI controls working. The example includes a DAML model for allocations using the FIX 5 protocol; note these ***are different from the CDM hackathon workflows***.
+
+  * [A Python trigger](../bot/python/readyToBookTrigger.py). Once started, it checks for new `Execution` contracts every 3 seconds, and submits new `Allocation` contracts in response. The workflow can be run independently from the aforementioned notebook.
+
+  * [A CDM JSON converter](../cdm/main.py), which encodes a trade event from a file, round-trips it to the ledger, and decodes the resulting contract, checking there are no differences.
 
 ## Hosted Dev
 
