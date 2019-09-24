@@ -15,7 +15,7 @@ The diagram below shows the architecture we will use. The blue cloud represents 
 1. Your DAML model will sit on a ledger (aka block-chain) either hosted in the [DABL cloud](https://projectdabl.com), or run as a local [sandbox ledger](https://docs.daml.com/tools/sandbox.html) process. The ledger will guarantee the integrity e.g. authentication, atomicity etc. of business transactions in your DAML models.
 2. As DAML models need to ultimately execute in a distributed environment, they are deterministic by design, and as a result there are some things they can't do. One of these is concurrency. To get around this, it is common to run off-ledger processes whose sole job is to listen for transactions on the ledger and trigger events/choices as a result. We refer to these as _bots_ or _triggers_ (by analogy to SQL triggers).
 For bots to run on the cloud, they **must** use the [DAZL API](https://github.com/lucianojoublanc-da/dazl-client), rather than e.g. the Java or Scala clients, and they may _not_ do any I/O.
-3. Going a step further, we may want to perform I/O with external users or systems. For security, such process must be run outside the cloud environment and interact via a simple REST API, using the language and library of your choice; this can even be JavaScript embedded on your own website.
+3. Going a step further, we may want to perform I/O with external users or systems. For security, such process must be run outside the cloud environment and interact via a simple REST API, using the language and library of your choice; this can even be JavaScript embedded on your own website. Note that the JSON ingested (#4) will use the CDM schema; below we explain how to translate this into the DAML JSON schema.
 
 
 ## Local Dev
