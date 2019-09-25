@@ -84,26 +84,7 @@ During the Hackathon, you will be expected to ingest JSON files following the CD
 }                                                               }
 ```
 
-For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../cdm) subdirectory of this repo. Essentially it boils down to this:
-
-```python
-import json
-from message_integration.metadata.cdm.cdmMetaDataReader import CdmMetaDataReader
-from message_integration.metadata.damlTypes import Record
-from message_integration.strategies.jsonCdmDecodeStrategy import JsonCdmDecodeStrategy
-from message_integration.strategies.jsonCdmEncodeStrategy import JsonCdmEncodeStrategy
-
-with open('CDM.json') as metadataRaw:
-
-  # Load meta-data used for translation
-  metadata = CdmMetaDataReader().fromJSON(json.load(metadataRaw))
-
-  # Decode json to match http-json-api
-  outJsonDict = JsonCdmDecodeStrategy(metadata).decode(inJsonDict, Record("Event"))
-
-  # Encode
-  inJsonDict = JsonCdmEncodeStrategy(metadata).encode(outJsonDict, Record("Event"))
-```
+For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../cdm) subdirectory of this repo. `import message_integration` library to use this. See the `main.py` file for a minimal example.
 
 ## Putting it all together
 
