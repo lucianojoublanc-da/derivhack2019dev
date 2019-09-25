@@ -5,6 +5,7 @@ daml 1.2
 module Scenarios where
 
 import Main
+import Fix5
 import DA.Date
 
 setup = scenario do
