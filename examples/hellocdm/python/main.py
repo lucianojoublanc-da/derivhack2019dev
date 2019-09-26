@@ -6,6 +6,7 @@ clientHeader = { "Authorization" : """Bearer xxxx"""}
 host = "localhost"
 port = "7575"
 endpoint = "https://{}:{}".format(host, port)
+metadataFileName = "../cdm/CDM.json"
 
 def loadCDMFile(fileName):
 
@@ -34,6 +35,16 @@ def readDAMLJsonFromLedger(contractName, signatoryName, httpEndpointPrefix):
      them as a list."""
 
   return []
+
+def exerciseSayHello(cashXferContractId, signatoryName, whomToGreet):
+
+  """Exercises 'SayHello' on a CashTransfer contract.
+  This sets the `contract.eventIdentifier.assignedIdentifier.identifier.value` 
+  to the given text, and increments the `version` by one.
+  Return the new contract ID.
+  """
+
+  return "#9999999999:9999999999"
   
 if __name__ == '__main__' : 
   print("#### Loading CDM JSON from 'CashTransfer.json' ####")
@@ -54,6 +65,15 @@ if __name__ == '__main__' :
     print("#### Reading Event contracts from Ledger as Alice ####")
     httpContractsResponse = readDAMLJsonFromLedger("Event", "Alice", endpoint)
     print("HTTP service responded: " + httpContractResponse.json())
+
+    if httpContractResponse == 200:
+      print("#### Exercising `SayHello` on the first `CashTransfer` contract ####")
+      firstContract = httpContractResponse.json()["result"]["activeContracts"][0]
+      httpExerciseResponse = exerciseSayHello(firstContract, "Alice", endpoint)
+
+    else:
+      print("#### Failed trying to exercise the new contract ###")
+      print(httpExerciseResponse.json())
 
   else:
     print("There was a problem creating the contract:")

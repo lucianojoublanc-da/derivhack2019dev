@@ -4,6 +4,7 @@
 daml 1.2
 module Main where
 
+import DA.Foldable
 import qualified Org.Isda.Cdm.Classes as CDM
 
 template CashTransfer
@@ -13,13 +14,13 @@ template CashTransfer
   where
     signatory owner
     controller owner can
-      Say : ContractId CashTransfer
+      SayHello : ContractId CashTransfer
         do create this
 {-        with
-          whatToSay: Text
+          whomToGreet: Text
         do
           create this with
-            contract.eventIdentifier.assignedIdentifier.identifier.value = "Hello world!"
+            contract.eventIdentifier.assignedIdentifier.identifier.value = fold ["Hello ", whomToGreet, "!"]
             contract.eventIdentifier.assignedIdentifier.identifier.version = 
               contract.eventIdentifier.assignedIdentifier.identifier.version + 1
 -}
