@@ -31,7 +31,7 @@ The local stack will consists of:
 3. APIs
     - [DAZL](https://github.com/lucianojoublanc-da/dazl-client)  ([api docs](https://lucianojoublanc-da.github.io/dazl-client)), a simplified python-based API requiring no code-gen step. Note that, as of writing, this doesn't integrate with Jupyter notebooks. Note that at this moment this is the only API that can be hosted on the DABL cloud (see point 2 in previous section). The [official bindings](https://docs.daml.com/app-dev/app-arch.html#application-libraries) are not supported at this time.
   Please also note that this is not properly documented right now; this should be fixed over the coming weeks.
-    - [Official SDK REST API](https://github.com/digital-asset/daml/tree/master/ledger-service/http-json), for performing I/O with the outside world.  Alternatively, you can test the process locally like so (make sure you have SDK version >= 0.13.***23***): 
+    - [Official SDK REST API](https://github.com/digital-asset/daml/blob/22a5b17ea0f5b39043c8a429dbd1661045d77d2b/ledger-service/http-json/README.md), for performing I/O with the outside world.  Alternatively, you can test the process locally like so (make sure you have SDK version >= 0.13.***23***): 
 
 ```sh
 # Create & compile a new DAML project
