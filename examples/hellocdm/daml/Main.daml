@@ -7,14 +7,14 @@ module Main where
 import DA.Foldable
 import qualified Org.Isda.Cdm.Classes as CDM
 
-template CashTransfer
+template Event
   with
     contract : CDM.Event
     owner : Party
   where
     signatory owner
     controller owner can
-      SayHello : ContractId CashTransfer
+      SayHello : ContractId Event
         do create this
 {-        with
           whomToGreet: Text

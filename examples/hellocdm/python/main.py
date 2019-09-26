@@ -1,12 +1,12 @@
 import json
 import requests
-from datetime import date, time
 
-brokerHeader = { "Authorization" : """Bearer xxxx"""}
-clientHeader = { "Authorization" : """Bearer xxxx"""}
+owner = "Alice"
+tokenHeader = { "Authorization" : """Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWRnZXJJZCI6ImhlbGxvY2RtIiwiYXBwbGljYXRpb25JZCI6ImZvb2JhciIsInBhcnR5IjoiQWxpY2UifQ.SY9x-Eh_mnPJwKzn4UXvHgtDSbFCRWZFqv0HgaGeXNI"""} #TODO: send meta static time
+epoch = 0 # millis from epoch
 host = "localhost"
 port = "7575"
-endpoint = "https://{}:{}".format(host, port)
+endpoint = "http://{}:{}".format(host, port)
 metadataFileName = "../../cdm/CDM.json"
 
 def loadCDMFile(fileName):
@@ -34,26 +34,58 @@ def convertCDMJsonToDAMLJson(cdmDict):
 def writeDAMLJsonToLedger(damlDict, contractName, signatoryName, httpEndpointPrefix):
 
   """Given a dict containing a DAML contract, load to the ledger via the HTTP
-     REST service. Return resulting HTTP code."""
+     REST service. Return resulting HTTP response."""
 
-  return 404
+  return requests.post(
+    httpEndpointPrefix + "/command/create",
+    headers = tokenHeader,
+    json = {
+      "templateId" : {
+        "moduleName": "Main",
+        "entityName": contractName
+      },
+      "meta" : {
+        "ledgerEffectiveTime": epoch # Wall time unsupported on DABL
+      },
+      "argument": {
+        "contract": damlDict,
+        "owner": signatoryName
+      }
+    }
+  )
 
 def readDAMLJsonFromLedger(contractName, signatoryName, httpEndpointPrefix):
 
   """Given the contract name, query ledger for all such contracts, returning
-     them as a list."""
+     the HTTP response, with a monkey patched `contract` accessor."""
 
-  return []
+  response = requests.post(
+    httpEndpointPrefix + "/contracts/search",
+    headers = tokenHeader,
+    json = {
+      "%templates" : [ 
+        {
+          "moduleName" : "Main",
+          "entityName" : contractName 
+        }
+      ]
+    }
+  )
+  
+  if response.status_code == 200:
+    response.contract = response.json()["result"][0]["activeContracts"][0]["argument"]
+
+  return response
 
 def exerciseSayHello(cashXferContractId, signatoryName, whomToGreet):
 
   """Exercises 'SayHello' on a CashTransfer contract.
   This sets the `contract.eventIdentifier.assignedIdentifier.identifier.value` 
   to the given text, and increments the `version` by one.
-  Return the new contract ID.
+  Return the updated contract:
   """
 
-  return "#9999999999:9999999999"
+  return {}
   
 if __name__ == '__main__' : 
   print("#### Loading CDM JSON from 'CashTransfer.json' ####")
@@ -66,23 +98,24 @@ if __name__ == '__main__' :
   print("Resulting JSON object:")
   print(damlJson)
 
-  print("#### Sending Event contract to ledger as Alice ####")
-  httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Event", "Alice", endpoint)
+  print("#### Sending Event contract to ledger ####")
+  httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Event", owner, endpoint)
   print("HTTP service responded: {}".format(httpCreateResponse))
 
-  if httpCreateResponse == 200:
-    print("#### Reading Event contracts from Ledger as Alice ####")
-    httpContractsResponse = readDAMLJsonFromLedger("Event", "Alice", endpoint)
-    print("HTTP service responded: " + httpContractResponse.json())
 
-    if httpContractResponse == 200:
+  if httpCreateResponse.status_code == 200:
+    print("#### Reading back Event contracts from Ledger ####")
+    httpContractsResponse = readDAMLJsonFromLedger("Event", owner, endpoint)
+    print("HTTP service responded: {}".format(httpContractsResponse))
+
+    if httpContractsResponse.status_code == 200:
       print("#### Exercising `SayHello` on the first `CashTransfer` contract ####")
-      firstContract = httpContractResponse.json()["result"]["activeContracts"][0]
-      httpExerciseResponse = exerciseSayHello(firstContract, "Alice", endpoint)
+      httpExerciseResponse = exerciseSayHello(httpContractsResponse.contract, owner, endpoint)
+      print("HTTP service responded: {}".format(httpExerciseResponse))
 
     else:
-      print("#### Failed trying to exercise the new contract ###")
-      print(httpExerciseResponse.json())
+      print("#### Failed trying to fetch the new contract ###")
+      print(httpContractsResponse.json())
 
   else:
     print("There was a problem creating the contract:")

@@ -14,13 +14,13 @@ pipenv install ../../cdm/lib/message_integration-0.0.1-py3-none-any.whl
 Load the templates into the ledger:
 
 ```sh
-daml sandbox --port 6865 --ledgerid allocs --wall-clock-time .daml/dist/*.dar
+daml sandbox --port 6865 --ledgerid hellocdm --static-time .daml/dist/*.dar
 ```
 
 Start the HTTP rest adapter:
 
 ```sh
-daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575
+daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575 --max-inbound-message-size 52428800
 ```
 
 Run the main program:
