@@ -74,10 +74,11 @@ def readDAMLJsonFromLedger(contractName, signatoryName, httpEndpointPrefix):
   
   if response.status_code == 200:
     response.contract = response.json()["result"][0]["activeContracts"][0]["argument"]
+    response.contractId = response.json()["result"][0]["activeContracts"][0]["contractId"]
 
   return response
 
-def exerciseSayHello(cashXferContractId, signatoryName, whomToGreet):
+def exerciseChoice(contractIdToExerciseOn, choiceName, choiceArguments, httpEndpointPrefix):
 
   """Exercises 'SayHello' on a CashTransfer contract.
   This sets the `contract.eventIdentifier.assignedIdentifier.identifier.value` 
@@ -85,8 +86,23 @@ def exerciseSayHello(cashXferContractId, signatoryName, whomToGreet):
   Return the updated contract:
   """
 
-  return {}
-  
+  return requests.post(
+    httpEndpointPrefix + "/command/exercise",
+    headers = tokenHeader,
+    json = {
+      "meta" : {
+        "ledgerEffectiveTime": epoch # Wall time unsupported on DABL
+      },
+      "templateId" : {
+        "moduleName" : "Main",
+        "entityName" : "Event",
+      },
+      "contractId": contractIdToExerciseOn,
+      "choice": choiceName,
+      "argument": choiceArguments,
+    }
+  )
+
 if __name__ == '__main__' : 
   print("#### Loading CDM JSON from 'CashTransfer.json' ####")
   cdmJson = loadCDMFile("CashTransfer.json")
@@ -110,8 +126,10 @@ if __name__ == '__main__' :
 
     if httpContractsResponse.status_code == 200:
       print("#### Exercising `SayHello` on the first `CashTransfer` contract ####")
-      httpExerciseResponse = exerciseSayHello(httpContractsResponse.contract, owner, endpoint)
+      httpExerciseResponse = exerciseChoice(httpContractsResponse.contractId, "SayHello", { "whomToGreet" : "world!" }, endpoint)
       print("HTTP service responded: {}".format(httpExerciseResponse))
+      if httpExerciseResponse.status_code != 200:
+        print(httpExerciseResponse.json())
 
     else:
       print("#### Failed trying to fetch the new contract ###")
