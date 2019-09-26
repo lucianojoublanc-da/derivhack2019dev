@@ -6,6 +6,8 @@ The examples consist of a rudimentary FIX 5.0 allocation workflow. This was chos
 
 The target audience is familiar with DAML, knows how to write a basic model with scenarios, load them onto the sandbox, and visualize them with the navigator. This is all covered in the [quickstart](https://docs.daml.com/getting-started/quickstart.html), up to the [Integrate with the ledger](https://docs.daml.com/getting-started/quickstart.html#integrate-with-the-ledger) section.
 
+If you are already familiar with the DAML ecosystem and prefer a terser, higher-level explanation, you can jump straight to the [reference documentation](./README.md)
+
 ## The Model
 
 Let's have a look at the [ui](../ui) directory:
@@ -42,7 +44,7 @@ data ExecutionReport =
   deriving (Eq, Show)
 ```
 
-These data structures would be mapped from a formal specification, but contain no notion of semantics. Also, they are not contracts - they can't live on the ledger on their own. A DAML contract, on the other hand, must have a `signatory`, which **give a DAML `Party` the right to create and archive the contract**. Contracts are then composed through choices to delegate rights between users. In the `Main.daml` file, we wrap this type in a `template`:
+These data structures would be mapped from a formal specification, but contain no notion of semantics. Also, they are not contracts - they can't live on the ledger on their own. A DAML contract, on the other hand, must have a `signatory`, which **gives a DAML `Party` the right to create and archive the contract**. Contracts are then composed through choices to delegate rights between users. In the `Main.daml` file, we wrap this type in a `template`:
 
 ```haskell
 template Execution
@@ -158,6 +160,8 @@ To end this section, let's recap what we've done:
 To conclude, we suggest you execute the remaining cells in the workbook, reading the comments that explain what is happening. You will create some `AllocationProposal`s and `Affirm` them, as in the scenario from the previous section.
 
 ## Automation
+
+We're now going to switch over to the [bot](../bot) directory and work on the second example program. This program uses the same DAML model as the previous section. You should start up the ledger and REST service as explained above, if you haven't already done so. First however, we need to digress briefly to explain why we can't do this in the UI notebook.
 
 In the formal FIX specification, there is another workflow which we haven't covered, the "Ready to Book" process (FIX 5.0 Rev 2 Spec, Vol 5, p. 50):
 
