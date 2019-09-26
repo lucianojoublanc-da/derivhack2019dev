@@ -4,36 +4,22 @@
 daml 1.2
 module Main where
 
-type AssetId = ContractId Asset
+import qualified Org.Isda.Cdm.Classes as CDM
 
-template Asset
+template CashTransfer
   with
-    issuer : Party
-    owner  : Party
-    name   : Text
+    contract : CDM.Event
+    owner : Party
   where
-    ensure name /= ""
-    signatory issuer
+    signatory owner
     controller owner can
-      Give : AssetId
-        with
-          newOwner : Party
+      Say : ContractId CashTransfer
+        do create this
+{-        with
+          whatToSay: Text
         do
           create this with
-            owner = newOwner
-
-setup = scenario do
-  alice <- getParty "Alice"
-  bob <- getParty "Bob"
-
-  aliceTV <- submit alice do
-    create Asset with
-      issuer = alice
-      owner = alice
-      name = "TV"
-
-  bobTV <- submit alice do
-    exercise aliceTV Give with newOwner = bob
-
-  submit bob do
-    exercise bobTV Give with newOwner = alice
+            contract.eventIdentifier.assignedIdentifier.identifier.value = "Hello world!"
+            contract.eventIdentifier.assignedIdentifier.identifier.version = 
+              contract.eventIdentifier.assignedIdentifier.identifier.version + 1
+-}

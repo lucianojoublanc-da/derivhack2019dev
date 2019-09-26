@@ -8,7 +8,7 @@ Compile the DAML model, fetch python dependencies.
 
 ```sh
 daml build
-pipenv install
+pipenv install ../../cdm/lib/message_integration-0.0.1-py3-none-any.whl
 ```
 
 Load the templates into the ledger:
@@ -26,11 +26,11 @@ daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575
 Run the main program:
 
 ```sh
-pipenv run main.py
+pipenv run python/main.py
 ```
 
 In another shell session, run the bot, and then ***re-run*** the main program to trigger some actions.
 ```sh
-pipenv run bot.py
-pipenv run main.py
+pipenv run python/bot.py &
+pipenv run python/main.py
 ```
