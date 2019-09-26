@@ -57,7 +57,7 @@ If you have followed the previous steps, you should be able to painlessly deploy
 1. Go to [https://projectdabl.com](https://projectdabl.com) and sign-up for an account.
 2. Create a new project (DerivHack2019) and ledger (staging).
 3. You should be prompted to upload your `*.dar` archives. Do so by drag-and-dropping required files.
-4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New from template` to create users and contracts, respectively, on the ledger.
+4. Under the `Active Contracts` tab, press the `+ Add Party` button and `+ New Contract` to create users and contracts, respectively, on the ledger.
 5. You can exercise choices that appear as buttons at the top of each selected contract. Note these will always have a `Party` field at the top - this is the submitting party.
 6. To use the REST API, you need to set up authentication as described [in the documentation](https://docs.projectdabl.com/#apiauthentication). Note that, the current version of the DABL REST API **is being updated to the official REST API** and should be available in the next few weeks.
 7. To enable your python/DAZL based automation processes, go to your DABL dashboard "Automation" tab, and drag-and-drop your `*.py` files.
