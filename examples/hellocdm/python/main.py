@@ -13,7 +13,10 @@ def loadCDMFile(fileName):
   """Opens a file containing a CDM JSON instance, and decodes into a Python
      dictionary."""
 
-  return {}
+  import json
+
+  with open(fileName) as cdmJsonString:
+    return json.load(cdmJsonString)
 
 def convertCDMJsonToDAMLJson(cdmDict):
 
