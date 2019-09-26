@@ -1,3 +1,4 @@
+import json
 import requests
 from datetime import date, time
 
@@ -6,14 +7,12 @@ clientHeader = { "Authorization" : """Bearer xxxx"""}
 host = "localhost"
 port = "7575"
 endpoint = "https://{}:{}".format(host, port)
-metadataFileName = "../cdm/CDM.json"
+metadataFileName = "../../cdm/CDM.json"
 
 def loadCDMFile(fileName):
 
   """Opens a file containing a CDM JSON instance, and decodes into a Python
      dictionary."""
-
-  import json
 
   with open(fileName) as cdmJsonString:
     return json.load(cdmJsonString)
@@ -23,7 +22,14 @@ def convertCDMJsonToDAMLJson(cdmDict):
   """Given a CDM dict, convert it into a dict that can be understood by the
      DAML HTTP REST service"""
 
-  return {}
+  from message_integration.metadata.cdm.cdmMetaDataReader import CdmMetaDataReader
+  from message_integration.metadata.damlTypes import Record
+  from message_integration.strategies.jsonCdmDecodeStrategy import JsonCdmDecodeStrategy
+  from message_integration.strategies.jsonCdmEncodeStrategy import JsonCdmEncodeStrategy
+
+  with open(metadataFileName) as metadataRaw:
+    metadata = CdmMetaDataReader().fromJSON(json.load(metadataRaw))
+    return JsonCdmDecodeStrategy(metadata).decode(cdmDict, Record("Event"))
 
 def writeDAMLJsonToLedger(damlDict, contractName, signatoryName, httpEndpointPrefix):
 
