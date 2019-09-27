@@ -1,7 +1,6 @@
-sdk-version: 0.13.25
+sdk-version: 0.13.27
 name: hellocdm
 source: daml
-scenario: Main:setup
 parties:
   - Alice
   - Bob
