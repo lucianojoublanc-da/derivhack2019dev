@@ -4,10 +4,8 @@
 daml 1.2
 module Main where
 
-import DA.Foldable
-import DA.List
 import qualified Org.Isda.Cdm.Classes as CDM
-import Org.Isda.Cdm.MetaClasses
+import DA.Foldable
 
 template Event
   with
@@ -19,10 +17,13 @@ template Event
       SayHello : ContractId Event 
         with whomToGreet: Text
         do -- Need to project deep field this.contract.eventIdentifier[0].assignedIdentifier[0].value and version
-          let value': Text =  fold ["Hello, ", whomToGreet, "!"]
-              version': Optional Int = fmap (+ 1) (head (head this.contract.eventIdentifier).assignedIdentifier).version
-              identifier': FieldWithMeta Text = (head (head this.contract.eventIdentifier).assignedIdentifier).identifier with value = value'
-              assignedIdentifier' = (CDM.AssignedIdentifier with identifier = identifier', version = version') :: (tail (head this.contract.eventIdentifier).assignedIdentifier) ;
-              eventIdentifier' = ((head this.contract.eventIdentifier) with assignedIdentifier = assignedIdentifier') :: (tail this.contract.eventIdentifier)
-              contract' = this.contract with eventIdentifier = eventIdentifier'
-          create this with contract = contract'
+          create this with contract = update "CDM" contract
+
+-- Set "Hello, ***!" as the id, and increment the version.
+update: Text -> CDM.Event -> CDM.Event
+update v e = e with eventIdentifier = map setIdentifierVersion e.eventIdentifier
+  where
+    setIdentifierVersion idt = idt with assignedIdentifier = map setAssignedIdentifierVersion idt.assignedIdentifier
+    setAssignedIdentifierVersion aIdt = aIdt with
+                                          version = fmap (+1) aIdt.version
+                                          identifier = aIdt.identifier with value = fold ["Hello, ", v, "!"]
