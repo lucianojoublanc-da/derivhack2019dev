@@ -5,7 +5,9 @@ daml 1.2
 module Main where
 
 import DA.Foldable
+import DA.List
 import qualified Org.Isda.Cdm.Classes as CDM
+import Org.Isda.Cdm.MetaClasses
 
 template Event
   with
@@ -14,13 +16,13 @@ template Event
   where
     signatory owner
     controller owner can
-      SayHello : ContractId Event
-        do create this
-{-        with
-          whomToGreet: Text
-        do
-          create this with
-            contract.eventIdentifier.assignedIdentifier.identifier.value = fold ["Hello ", whomToGreet, "!"]
-            contract.eventIdentifier.assignedIdentifier.identifier.version = 
-              contract.eventIdentifier.assignedIdentifier.identifier.version + 1
--}
+      SayHello : ContractId Event 
+        with whomToGreet: Text
+        do -- Need to project deep field this.contract.eventIdentifier[0].assignedIdentifier[0].value and version
+          let value': Text =  fold ["Hello, ", whomToGreet, "!"]
+              version': Optional Int = fmap (+ 1) (head (head this.contract.eventIdentifier).assignedIdentifier).version
+              identifier': FieldWithMeta Text = (head (head this.contract.eventIdentifier).assignedIdentifier).identifier with value = value'
+              assignedIdentifier' = (CDM.AssignedIdentifier with identifier = identifier', version = version') :: (tail (head this.contract.eventIdentifier).assignedIdentifier) ;
+              eventIdentifier' = ((head this.contract.eventIdentifier) with assignedIdentifier = assignedIdentifier') :: (tail this.contract.eventIdentifier)
+              contract' = this.contract with eventIdentifier = eventIdentifier'
+          create this with contract = contract'

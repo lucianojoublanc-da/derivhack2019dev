@@ -7,7 +7,7 @@ name = "pypi"
 pylint = "*"
 
 [packages]
-dictdiffer = "*"
+dazl = "*"
 message_integration = {path = "./../../cdm/lib/message_integration-0.0.1-py3-none-any.whl"}
 python-dateutil = "*"
 requests = "*"

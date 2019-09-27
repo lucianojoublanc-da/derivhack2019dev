@@ -126,7 +126,7 @@ if __name__ == '__main__' :
 
     if httpContractsResponse.status_code == 200:
       print("#### Exercising `SayHello` on the first `CashTransfer` contract ####")
-      httpExerciseResponse = exerciseChoice(httpContractsResponse.contractId, "SayHello", { "whomToGreet" : "world!" }, endpoint)
+      httpExerciseResponse = exerciseChoice(httpContractsResponse.contractId, "SayHello", { "whomToGreet" : "World" }, endpoint)
       print("HTTP service responded: {}".format(httpExerciseResponse))
       if httpExerciseResponse.status_code != 200:
         print(httpExerciseResponse.json())
