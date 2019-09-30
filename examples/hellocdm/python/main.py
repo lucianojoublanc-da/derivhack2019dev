@@ -119,9 +119,8 @@ if __name__ == '__main__' :
   print(damlJson)
 
   print("#### Sending Event contract to ledger ####")
-  for i in range(1, 10):
-    httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Transfer", owner, endpoint)
-    print("HTTP service responded: {}".format(httpCreateResponse))
+  httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Transfer", owner, endpoint)
+  print("HTTP service responded: {}".format(httpCreateResponse))
 
   if httpCreateResponse.status_code == 200:
     print("#### Reading back Transfer contracts from Ledger ####")
