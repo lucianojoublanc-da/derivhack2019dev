@@ -78,14 +78,17 @@ During the Hackathon, you will be expected to ingest JSON files following the CD
             "qualification": "EVENT_CREATION_DATE_TIME"       |                 "dateTime": "2018-03-20T18:13:51Z",
                                                               >                 "timezone": "UTC"
                                                               >             },
-                                                              >             "qualification": "EventTimestampQualificationEnum
+                                                              >             "qualification": "EventTimestampQualificationEnum_eventCreationDateTime"
         }                                                               }
     ]                                                               ]
 }                                                               }
 ```
 
-For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../examples/ingestcdm) subdirectory of this repo. `import message_integration` library to use this. The library and metadata file is under the [resources](../resources) directory.
+For convenience, we are providing you with a python library to do this translation for you. The library and metadata file is under the [resources](../resources) directory. `import message_integration` library to use this. There is also as an example of converting a cash transfer CDM event, in the [hellocdm](../examples/hellocdm) app. 
 
 ## Putting it all together
 
-At this point you should have all the ingredients to build an app that will be DABL-compatible. You should look through the [examples](../examples) folder. [hellocdm](../examples/hellocdm) encapsulates all the above concepts in the simplest way possible. [ingestcdm](../examples/ingestcdm) is a stand-along program that shows how to convert the CDM schema for HTTP consumption. And [fixnotebook](../examples/fixnotebook) shows a more complex workflow using the FIX protocol and a Jupyter/IPython notebook as a UI.
+At this point you should have all the ingredients to build an app that will be DABL-compatible. You should look through the [examples](../examples) folder.
+
+* [hellocdm](../examples/hellocdm) encapsulates all the above concepts in the simplest way possible.
+* [fixnotebook](../examples/fixnotebook) shows a more complex workflow using the FIX protocol and a Jupyter/IPython notebook as a UI.
