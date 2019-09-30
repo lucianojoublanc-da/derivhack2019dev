@@ -2,7 +2,7 @@ daml 1.2
 
 -- | This file is auto-generated from the ISDA Common
 --   Domain Model, do not edit.
---   @version 2.4.7
+--   @version 2.4.14
 module Org.Isda.Cdm.Classes
   ( module Org.Isda.Cdm.Classes ) where
 
@@ -1241,6 +1241,8 @@ data CalculationPeriodData = CalculationPeriodData with
   daysInLeapYearPeriod : Int
   daysInPeriod : Int
   endDate : Date
+  isFirstPeriod : Bool
+  isLastPeriod : Bool
   startDate : Date
     deriving (Eq, Ord, Show)
 
@@ -5235,14 +5237,6 @@ data Equity = Equity with
   productIdentifier : ProductIdentifier
     deriving (Eq, Ord, Show)
 
-data EquityCalculationPeriodData = EquityCalculationPeriodData with 
-  businessDate : Date
-  endDate : Date
-  isFirstPeriod : Bool
-  isLastPeriod : Bool
-  startDate : Date
-    deriving (Eq, Ord, Show)
-
 -- | A class for defining the merger events and their
 --   treatment.
 data EquityCorporateEvents = EquityCorporateEvents with 
@@ -5293,11 +5287,6 @@ data EquityPayout = EquityPayout with
   dividendReturnTerms : Optional DividendReturnTerms
     -- ^ 2018 ISDA CDM Equity Confirmation for Security Equity
     --   Swap: Dividend Obligations
-  equityCashSettlementAmount : Optional Decimal
-    -- ^ Equity cash settlement amount calculation, in
-    --   accordance with Part 1 Section 12 of the 2018 ISDA
-    --   CDM Equity Confirmation for Security Equity Swap,
-    --   Para 72. &#39;Equity Cash Settlement Amount&#39;.
   meta : Optional MetaFields
   payerReceiver : Optional PayerReceiver
   paymentDates : PaymentDates
@@ -5747,13 +5736,8 @@ data Execution = Execution with
     -- ^ The execution venue identification, when applicable.
   identifier : [Identifier]
     -- ^ The identifier(s) associated with the execution.
-  legalAgreementReference : [ReferenceWithMeta LegalAgreement]
-    -- ^ Whether that execution references any higher-level
-    --   agreement between the parties, as in the case of a
-    --   Master Confirmation Agreeemnt governing subsequent
-    --   executions.
   meta : Optional MetaFields
-  party : [Party]
+  party : [ReferenceWithMeta Party]
     -- ^ The party reference is optional because positioned as
     --   part of the Event class when the execution is
     --   specified as part of such context.
@@ -7940,6 +7924,9 @@ data Lineage = Lineage with
     --   through a Lineage object, together with pointer(s) to
     --   the Event or set of Events leading up to the current
     --   (new) state.
+  transferReference : [ReferenceWithMeta TransferPrimitive]
+    -- ^ The reference to the instantiation of a
+    --   TransferPrimitive object.
     deriving (Eq, Ord, Show)
 
 data Loan = Loan with 
@@ -9879,6 +9866,8 @@ data PortfolioState = PortfolioState with
 --   being held and constitutes the atomic element of a
 --   Portfolio.
 data Position = Position with 
+  cashBalance : Optional Money
+    -- ^ The aggregate cost of proceeds
   contractReference : Optional (ReferenceWithMeta Contract)
     -- ^ Reference to the Contract, in case product is
     --   contractual and the contract has been formed
@@ -10291,6 +10280,7 @@ data QuantityMultiplier = QuantityMultiplier with
   fxLinkedNotionalSchedule : Optional FxLinkedNotionalSchedule
     -- ^ Multiplier specified as an FX-linked schedule, e.g.
     --   for a resetting cross-currency swap..
+  multiplierValue : Decimal
     deriving (Eq, Ord, Show)
 
 -- | Class to specify the quantity of a product as a
