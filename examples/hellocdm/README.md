@@ -8,7 +8,7 @@ Compile the DAML model, fetch python dependencies.
 
 ```sh
 daml build
-pipenv install ../../cdm/lib/message_integration-0.0.1-py3-none-any.whl
+pipenv install ../../resources/message_integration-0.0.1-py3-none-any.whl
 ```
 
 Load the templates into the ledger:

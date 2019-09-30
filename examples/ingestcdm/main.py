@@ -9,7 +9,7 @@ from message_integration.strategies.jsonCdmDecodeStrategy import JsonCdmDecodeSt
 from message_integration.strategies.jsonCdmEncodeStrategy import JsonCdmEncodeStrategy
 
 if __name__ == '__main__':
-  with open('CDM.json') as metadataRaw:
+  with open('../resources/CDM.json') as metadataRaw:
 
     metadata = CdmMetaDataReader().fromJSON(json.load(metadataRaw))
 

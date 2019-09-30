@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "25e6af869ff4e170f44867299f0904fdd4434d086b3520118f9303312df0625b"
+            "sha256": "3bc6e8bd1a6f33c7a4e3074c21d15ac2e8a1550ada3e7925b7c9603490253d65"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -71,11 +71,11 @@
         },
         "dazl": {
             "hashes": [
-                "sha256:28f5e6871b9241000f4489d74aff675370982c10b9d48cbcc17c5c77f2cb0d56",
-                "sha256:9072822197466e24a09b3c939d3e1710f45905dfe78612dce2bf86d179448d75"
+                "sha256:0da1b9f925fc975e8eef8a895abb08bc713b8694762089db5e5a828233513b5d",
+                "sha256:919865214a10a289a2f7750f17969e610066ec1bb9ee5013a32412e8ad4cc2f3"
             ],
             "index": "pypi",
-            "version": "==6.3.1"
+            "version": "==6.3.2"
         },
         "google-auth": {
             "hashes": [
@@ -307,10 +307,10 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:9b3f17b0550f82e28a6776a4e5222441f48e523b0773df4bc505bb6b7c2093b7",
-                "sha256:c7e2e5773d87ccc00d01c273e439386f4d6d63cce61317a79ccce5880162f9fb"
+                "sha256:98c665ad84d10b18318c5ab7c3d203fe11714cbad2a4aef4f44651f415392754",
+                "sha256:b7546ffdedbf7abcfbff93cd1de9e9980b1ef744852689decc5aeada324238c6"
             ],
-            "version": "==2.3.0"
+            "version": "==2.3.1"
         },
         "isort": {
             "hashes": [
@@ -382,7 +382,7 @@
                 "sha256:d896919306dd0aa22d0132f62a1b78d11aaf4c9fc5b3410d3c666b818191630a",
                 "sha256:ffde2fbfad571af120fcbfbbc61c72469e72f550d676c3342492a9dfdefb8f12"
             ],
-            "markers": "implementation_name == 'cpython' and python_version >= '3.7' and python_version < '3.8'",
+            "markers": "implementation_name == 'cpython' and python_version < '3.8'",
             "version": "==1.4.0"
         },
         "wrapt": {

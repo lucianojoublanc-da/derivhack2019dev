@@ -84,14 +84,8 @@ During the Hackathon, you will be expected to ingest JSON files following the CD
 }                                                               }
 ```
 
-For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../cdm) subdirectory of this repo. `import message_integration` library to use this. See the `main.py` file for a minimal example.
+For convenience, we are providing you with a python library to do this translation for you, as well as a full example of converting a trade event, under the [CDM](../examples/ingestcdm) subdirectory of this repo. `import message_integration` library to use this. The library and metadata file is under the [resources](../resources) directory.
 
 ## Putting it all together
 
-We have provided two sample programs in this repo that correspond to items #2 and #3, #4 in the diagram.
-
-  2. [A Python trigger](../bot/python/readyToBookTrigger.py). Once started, it checks for new `Execution` contracts every 3 seconds, and submits new `Allocation` contracts in response. The workflow can be run independently from the aforementioned notebook.
-
-  3. [A Python Jupyter Notebook](../ui/python/ui.ipynb) that serves as a rudimentary UI. You will need [BeakerX](http://beakerx.com/documentation) installed to get the UI controls working. The example includes a DAML model for allocations using the FIX 5 protocol; note these ***are different from the CDM hackathon workflows***.
-
-  4. [A CDM JSON converter](../cdm/main.py), which encodes a trade event from a file, round-trips it to the ledger, and decodes the resulting contract, checking there are no differences.
+At this point you should have all the ingredients to build an app that will be DABL-compatible. You should look through the [examples](../examples) folder. [hellocdm](../examples/hellocdm) encapsulates all the above concepts in the simplest way possible. [ingestcdm](../examples/ingestcdm) is a stand-along program that shows how to convert the CDM schema for HTTP consumption. And [fixnotebook](../examples/fixnotebook) shows a more complex workflow using the FIX protocol and a Jupyter/IPython notebook as a UI.

@@ -10,7 +10,7 @@ epoch = 0 # millis from epoch
 host = "localhost"
 port = "7575"
 endpoint = "http://{}:{}".format(host, port)
-metadataFileName = "../../cdm/CDM.json"
+metadataFileName = "../../resources/CDM.json"
 
 def loadCDMFile(fileName):
 

@@ -1,8 +1,10 @@
 # Barclays Derivhack 2019
 
-Digital Asset supplementary material
+Digital Asset supplementary material for Barclays Derivhack 2019. Directory structure:
 
-* [guide](./guide/README.md) - ***start here***.
-* [ui](./ui/python/ui.ipynb) - An IPython notebook that demonstrates interaction with the ledger from the outside world, using REST.
-* [bot](./bot) - A python program that demonstrates how to create a trigger/bot using DAZL bindings.
-* [cdm](./cdm) - Library & example for translating JSON CDM to JSON DAML for use with the REST api.
+* [doc](./doc/README.md) - A high-level overview of how to architect your program.
+* [examples](./examples) - Several stand-alone programs with step-by-step instructions including,
+  - a [hello world](./examples/hellocdm) application (***new users - start here***), including a react-based UI.
+  - an example of [ingesting cdm messages](./examples/ingestcdm)
+  - an example of an [allocations workflow](./examples/fixnotebook) using the FIX (not CDM) schema, with a jupyter notebook UI.
+* [resources](./resources) - Files common to all projects, including the messages ingestion library and acompanying meta-data in JSON format.
