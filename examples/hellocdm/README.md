@@ -2,9 +2,15 @@
 
 This project shows you how to write a simple 'hello world' application that loads a CDM contract onto the ledger, exercises a choice, and reads it back.
 
+## Prerequisites
+* [DAML SDK](https://docs.daml.com/getting-started/installation.html)
+* [Python 3.7](https://www.python.org/downloads/)
+* [Pipenv](https://pipenv.kennethreitz.org/en/latest/install/#installing-pipenv)
+* [Yarn](https://yarnpkg.com/lang/en/docs/install/)
+
 ## Quickstart
 
-Compile the DAML model, fetch python dependencies.
+Compile the DAML model, fetch Python dependencies:
 
 ```sh
 daml build
@@ -26,14 +32,16 @@ daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575 --max-
 Run the main program:
 
 ```sh
-pipenv run python/main.py
+pipenv run python python/main.py
 ```
 
 In another shell session, run the bot, and then ***re-run*** the main program to trigger some actions.
 ```sh
-pipenv run python/bot.py &
-pipenv run python/main.py
+pipenv run python python/bot.py &
+pipenv run python python/main.py
 ```
+
+You can now run the reporting UI against the ledger by following the instructions [here](ui/).
 
 ## Tutorial
 
@@ -194,7 +202,7 @@ Finally, let's test out the script:
 
 ```sh
 pipenv install ../../resources/message_integration-0.0.1-py3-none-any.whl
-pipenv run python/main.py
+pipenv run python python/main.py
 ```
 
 You should see some output from each step as it's executed, showing the HTTP responses. If you inspect the ledger now, you should see some new contracts.
@@ -229,7 +237,7 @@ The last line blocks the script and sits in a loop, making the above call-backs 
 We can now start up the script
 ```sh
 $ pipenv run python python/bot.py
-Ready & listening for new `Event` contracts ... 
+Ready & listening for new `Transfer` contracts ... 
 ```
 
 Now, run the main script again, in a separate shell. The bot should print out something like:
@@ -263,3 +271,7 @@ in the main script, and change the global key in `CashTransfer.json` to somethin
 ```
 
 Now run the main script again. It should now work correctly.
+
+### Reporting UI
+
+You can run the reporting UI against the ledger by following the instructions [here](ui/).

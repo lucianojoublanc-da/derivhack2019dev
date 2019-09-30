@@ -5,11 +5,11 @@ import { useLedgerState, getContracts } from "../../context/LedgerContext";
 function Default() {
 
   const ledger = useLedgerState();
-  const events = getContracts(ledger, "Main", "Event");
+  const transfers = getContracts(ledger, "Main", "Transfer");
 
   return (
     <>
-      <Contracts contracts={events} />
+      <Contracts contracts={transfers} />
     </>
   );
 }

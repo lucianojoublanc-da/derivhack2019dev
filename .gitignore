@@ -4,3 +4,4 @@ navigator.log
 log.txt
 node_modules/
 .ipynb_checkpoints
+.vscode/

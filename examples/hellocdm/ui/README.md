@@ -4,44 +4,43 @@
 
 * [Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-This template assumed you have a running ledger with CDM contract populated as described in the [parent folder](../).
 ## Quick Start
 
-```
+Follow the quick start instructions in the [parent folder](../), which leaves you with a running ledger and a single `Transfer` contract on it.
+
+Install the Javascript dependencies:
+```sh
 yarn install
 ```
-#### 2. Run `yarn install`
 
-
-#### 3. Start the sandbox and JSON API
-
-```
-daml build && daml sandbox --ledgerid myLedgerId --scenario Module:scenaro myDar.dar
-```
-and
-```
-daml json-api --ledger-host localhost --ledger-port 6865 --http-port 7575
+Start up the development server:
+```sh
+yarn start
 ```
 
-#### 3. Set your ledger ID
+This opens a browser page pointing to `http://localhost:3000/#/login`.
 
-Set the ledger id in `src/context/UserContext.js` in function `loginUser`. This should be the same value you used to start the sandbox in step 2.
+Login as `Alice` (case sensitive), leaving the password blank.
 
-#### 3. Run `yarn start`
+You are now redirected to `http://localhost:3000/#/app/default` where you see the contract listed with an explorable JSON tree in the `Argument` column. This the default view implemented in [src/pages/default/Default.js](src/pages/Default.js), which uses the `Contracts` React component's defaults. It is useful to explore a contracts data to determine which fields to display.
 
-Runs the app in the development mode.
+In the report tab you can see a ledger view with specific fields displayed for the contract, a textfield and button to exercise a choice. It is implemented in [src/pages/report/Report.js](src/pages/report/Report.js), where you can see how custom columns and actions can be passed to the `Contracts` component.
 
-Open http://localhost:3000 to view it in the browser. Whenever you modify any of the source files inside the `/src` folder,
-the module bundler ([Webpack](http://webpack.github.io/)) will recompile the app on the fly and refresh all the connected browsers.
+You can now enter a new greeting message and hit `Enter` to exercise the `SayHello` choice on the contract. Notice how the `Identifier` and `Version` values change when you do that.
 
-## Production build
+By modifying this template application you can now create custom reports as required for the hackathon.
 
-Run `yarn build` to build the app for production to the build folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running against DABL
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+Two changes are required once you've deployed your DAML application to the DABL cloud.
 
-## License
+1. In [src/config.js](src/config.js) you can specify the ledger ID of your deployed ledger, which you can obtain from the DABL settings page.
 
-MIT
+2. You also have to switch the `isLocalDev` flag to `false` and copy the tokens for each party into the `DABL config` section in [src/config.js](src/config.js), which you can also obtain from the DABL settings page for your ledger.
+
+3. Finally, you'll need to change the `proxy` config entry in [package.json](package.json) to point to the DABL API endpoint, which is also listed on the DABL settings page for your ledger.
+
+You can now run `yarn start` again and your application will work against the deployed DABL ledger.
+
+Note that DABL uses obfuscated party names on the ledger, so you'll have to maintain a mapping between your defined party names and the DABL ones if you want to display parties in the UI. You can find out the mapping by looking at the `UserInfo` contracts in the DABL contracts view.
+

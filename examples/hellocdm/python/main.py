@@ -113,12 +113,12 @@ if __name__ == '__main__' :
   print("Loaded the following JSON object:")
   print(cdmJson)
 
-  print("#### Converting to DAML JSON, wrapping in an 'Event' contract ####")
+  print("#### Converting to DAML JSON, wrapping in an 'Transfer' contract ####")
   damlJson = convertCDMJsonToDAMLJson(cdmJson)
   print("Resulting JSON object:")
   print(damlJson)
 
-  print("#### Sending Event contract to ledger ####")
+  print("#### Sending Transfer contract to ledger ####")
   httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Transfer", owner, endpoint)
   print("HTTP service responded: {}".format(httpCreateResponse))
 
