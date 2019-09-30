@@ -51,8 +51,9 @@ def writeDAMLJsonToLedger(damlDict, contractName, signatoryName, httpEndpointPre
         "ledgerEffectiveTime": epoch # Wall time unsupported on DABL
       },
       "argument": {
-        "contract": damlDict,
-        "owner": signatoryName
+        "event": damlDict,
+        "owner": signatoryName,
+        "obs": signatoryName
       }
     }
   )
@@ -98,7 +99,7 @@ def exerciseChoice(contractIdToExerciseOn, choiceName, choiceArguments, httpEndp
       },
       "templateId" : {
         "moduleName" : "Main",
-        "entityName" : "Event",
+        "entityName" : "Transfer",
       },
       "contractId": contractIdToExerciseOn,
       "choice": choiceName,
@@ -119,12 +120,12 @@ if __name__ == '__main__' :
 
   print("#### Sending Event contract to ledger ####")
   for i in range(1, 10):
-    httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Event", owner, endpoint)
+    httpCreateResponse = writeDAMLJsonToLedger(damlJson, "Transfer", owner, endpoint)
     print("HTTP service responded: {}".format(httpCreateResponse))
 
   if httpCreateResponse.status_code == 200:
-    print("#### Reading back Event contracts from Ledger ####")
-    httpContractsResponse = readDAMLJsonFromLedger("Event", owner, endpoint)
+    print("#### Reading back Transfer contracts from Ledger ####")
+    httpContractsResponse = readDAMLJsonFromLedger("Transfer", owner, endpoint)
     print("HTTP service responded: {}".format(httpContractsResponse))
 
     if httpContractsResponse.status_code == 200:
