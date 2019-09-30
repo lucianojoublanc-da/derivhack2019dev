@@ -1,25 +1,26 @@
-# Tutorial
+# FIX allocation using Jupyter
 
-This document serves as a step-by-step walkthrough of the examples that are provided under the [ui](../ui) and [bot](../bot) dirs. 
+This document serves as a step-by-step walkthrough of the examples under this directory.
 
 The examples consist of a rudimentary FIX 5.0 allocation workflow. This was chosen as it is similar to the hackathon exercises, yet the standard (FIX vs CDM) and workflows differ substantially.
 
 The target audience is familiar with DAML, knows how to write a basic model with scenarios, load them onto the sandbox, and visualize them with the navigator. This is all covered in the [quickstart](https://docs.daml.com/getting-started/quickstart.html), up to the [Integrate with the ledger](https://docs.daml.com/getting-started/quickstart.html#integrate-with-the-ledger) section.
 
-If you are already familiar with the DAML ecosystem and prefer a terser, higher-level explanation, you can jump straight to the [reference documentation](./README.md)
+To understand the high-level architecture, refer to the [reference documentation](../../doc/README.md)
 
 ## The Model
 
-Let's have a look at the [ui](../ui) directory:
+Let's have a look at the root directory:
 
 ```
-ui
+fixnotebook
 ├── daml
 │   ├── Fix5.daml
 │   ├── Main.daml
 │   └── Scenarios.daml
 ├── daml.yaml
 └── python
+    ├── readyToBookTrigger.py
     └── ui.ipynb
 ```
 
@@ -161,7 +162,7 @@ To conclude, we suggest you execute the remaining cells in the workbook, reading
 
 ## Automation
 
-We're now going to switch over to the [bot](../bot) directory and work on the second example program. This program uses the same DAML model as the previous section. You should start up the ledger and REST service as explained above, if you haven't already done so. First however, we need to digress briefly to explain why we can't do this in the UI notebook.
+We're now going to look at `python/readyToBookTrigger.py` and run this as a stand-alone process to automate some workflows. You should start up the ledger and REST service as explained above, if you haven't already done so. First however, we need to digress briefly to explain why we can't do this in the UI notebook.
 
 In the formal FIX specification, there is another workflow which we haven't covered, the "Ready to Book" process (FIX 5.0 Rev 2 Spec, Vol 5, p. 50):
 
@@ -169,9 +170,9 @@ In the formal FIX specification, there is another workflow which we haven't cove
 
 This workflow sits apart from the allocation/affirmation in the UI notebook; in reality it should be done beforehand allocation takes place, but for demonstration purposes we've not modelled this so that the examples can be run independently.
 
-What is interesting about this process, is that the workflow can't be modelled in DAML directly: we need to trigger an event as a result of a contract creation. To work around this, we can create a bot, as we've done in `../bot/python/readyToBookTrigger.py`, using the unofficial DAML python bindings.
+What is interesting about this process, is that the workflow can't be modelled in DAML directly: we need to trigger an event as a result of a contract creation. To work around this, we can create a bot, as we've done in `../python/readyToBookTrigger.py`, using the unofficial DAML python bindings.
 
-In this file you will find three callbacks:
+In `readyToBookTrigger.py` you will find three callbacks:
 
   * `onInit`: creates a global variable `execs` which we'll use to collect executions.
 
@@ -184,7 +185,7 @@ In reality, the last step would run at the market close, say after 4:30 GMT for 
 Let's try out this process now. First, install the DAZL client using pip if you haven't done so already:
 
 ```sh
-pip install dazl
+pip3 install dazl
 ```
 
 Next, start the trigger from the `bot` directory:
