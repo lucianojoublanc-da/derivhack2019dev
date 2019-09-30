@@ -17,14 +17,14 @@ user = network.aio_party("Alice")
 
 @user.ledger_init()
 async def onInit(event: InitEvent):
-  print("Ready & listening for new `Event` contracts ... ")
+  print("Ready & listening for new `Transfer` contracts ... ")
 
-@user.ledger_created("Main.Event")
+@user.ledger_created("Main.Transfer")
 async def onCreate(event: ContractCreateEvent):
-  allContracts = user.find(template = "Main.Event")
+  allContracts = user.find(template = "Main.Transfer")
   for contract in allContracts:
-    print(contract.cdata["contract"]["eventIdentifier"][0]["assignedIdentifier"][0]["identifier"]["value"])
-    if contract.cdata["contract"]["eventIdentifier"][0]["assignedIdentifier"][0]["identifier"]["value"] == "Hello, CDM!":
+    print(contract.cdata["event"]["eventIdentifier"][0]["assignedIdentifier"][0]["identifier"]["value"])
+    if contract.cdata["event"]["eventIdentifier"][0]["assignedIdentifier"][0]["identifier"]["value"] == "Hello, CDM!":
       print("I have already greeted contract #{}, ignoring.".format(contract.cid))
     else:
       print("Greeting (exercising choice) on contract # {}".format(contract.cid))

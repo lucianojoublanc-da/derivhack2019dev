@@ -254,4 +254,12 @@ The reason for this is that _both_ our `main.py` and the `bot.py` are racing to 
 httpExerciseResponse = exerciseChoice(...)
 ```
 
-in the main script and run it again. The script should now work correctly.
+in the main script, and change the globaly key in `CashTransfer.json` to something else, to create a unique record:
+
+```json
+  "meta": {
+    "globalKey": "14801403"
+  },
+```
+
+Now run the main script again. It should now work correctly.
