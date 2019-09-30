@@ -4,8 +4,9 @@
 daml 1.2
 module Main where
 
+import DA.List
+import DA.Optional
 import qualified Org.Isda.Cdm.Classes as CDM
-import DA.Foldable
 
 template Event
   with
@@ -26,4 +27,4 @@ update v e = e with eventIdentifier = map setIdentifierVersion e.eventIdentifier
     setIdentifierVersion idt = idt with assignedIdentifier = map setAssignedIdentifierVersion idt.assignedIdentifier
     setAssignedIdentifierVersion aIdt = aIdt with
                                           version = fmap (+1) aIdt.version
-                                          identifier = aIdt.identifier with value = fold ["Hello, ", v, "!"]
+                                          identifier = aIdt.identifier with value = "Hello, " <> whomToGreet <> "!"
