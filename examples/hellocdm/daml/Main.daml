@@ -27,4 +27,4 @@ update v e = e with eventIdentifier = map setIdentifierVersion e.eventIdentifier
     setIdentifierVersion idt = idt with assignedIdentifier = map setAssignedIdentifierVersion idt.assignedIdentifier
     setAssignedIdentifierVersion aIdt = aIdt with
                                           version = fmap (+1) aIdt.version
-                                          identifier = aIdt.identifier with value = "Hello, " <> whomToGreet <> "!"
+                                          identifier = aIdt.identifier with value = "Hello, " <> v <> "!"
