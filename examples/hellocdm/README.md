@@ -37,7 +37,7 @@ pipenv run python/main.py
 
 ## Tutorial
 
-In this section we are going to walk throught the app step-by-step.
+In this section we are going to walk through the app step-by-step.
 
 ### Loading the DAML model onto a local ledger
 
@@ -89,7 +89,7 @@ This is a minimal template, which has only the bare requirements. It has some da
 
 The CDM data model describing `CDM.Event`, is under `daml/Org/Isda/Cdm`, but we don't need to worry about it for this for the time being.
 
-Bear in mind that a ledger can only house contracts instantiated from `template`s. Data can not live on it's own on the ledger (by anology to SQL you must create a record in a table - you can't upload a plain data type).
+Bear in mind that a ledger can only house contracts instantiated from `template`s. Data can not live on it's own on the ledger (by analogy to SQL you must create a record in a table - you can't upload a plain data type).
 
 Now, let's start the ledger and http services:
 
@@ -100,7 +100,7 @@ daml sandbox --port 6865 --ledgerid hellocdm --static-time .daml/dist/*.dar
 
 The first command compiles our model to bytecode.
 
-The second command will start a ledger locally. It's important that we don't change the `--ledgerid hellocdm`, as this is used for authentication using JWT. It's also importat to pass `--static-time`, as DABL does not support wall-clock time, and creation of contracts would fail; this also means that we need to pass a `meta` element in any creation messages to the ledger, which we'll explain in the next section.
+The second command will start a ledger locally. It's important that we don't change the `--ledgerid hellocdm`, as this is used for authentication using JWT. It's also important to pass `--static-time`, as DABL does not support wall-clock time, and creation of contracts would fail; this also means that we need to pass a `meta` element in any creation messages to the ledger, which we'll explain in the next section.
 
 Now, let's start the HTTP service, so we can create contracts and query the ledger:
 
@@ -122,7 +122,7 @@ Loaded the following JSON object:
 {'action': 'NEW', 'eventDate': {'day': 20, 'month': 3, 'year': 2018}, 'eventEffect': {'transfer': [{'globalReference': '69e7b2f5'}]}, 'eventIdentifier': [{'assignedIdentifier': [{'identifier': {'value': 'payment-1'}, 'version': 1}], 'issuerReference': {'globalReference': 'baa9cf67', 'externalReference': 'party1'}, 'meta': {'globalKey': '4576e46b'}}], 'eventQualifier': 'CashTransfer', 'messageInformation': {'messageId': {'value': '1486297', 'meta': {'scheme': 'http://www.party1.com/message-id'}}, 'sentBy': {'value': '894500DM8LVOSCMP9T34'}, 'sentTo': [{'value': '49300JZDC6K840D7F79'}]}, 'meta': {'globalKey': '14801403'}, 'party': [{'meta': {'globalKey': 'baa9cf67', 'externalKey': 'party1'}, 'partyId': [{'value': '894500DM8LVOSCMP9T34', 'meta': {'scheme': 'http://www.fpml.org/coding-scheme/external/iso17442'}}]}, {'meta': {'globalKey': 'a275c2fe', 'externalKey': 'party2'}, 'partyId': [{'value': '549300JZDC6K840D7F79', 'meta': {'scheme': 'http://www.fpml.org/coding-scheme/external/iso17442'}}]}], 'primitive': {'transfer': [{'cashTransfer': [{'amount': {'amount': 1480, 'currency': {'value': 'USD'}, 'meta': {'globalKey': '7c20311f'}}, 'payerReceiver': {'payerPartyReference': {'globalReference': 'baa9cf67', 'externalReference': 'party1'}, 'receiverPartyReference': {'globalReference': 'a275c2fe', 'externalReference': 'party2'}}}], 'meta': {'globalKey': '69e7b2f5'}, 'settlementDate': {'adjustedDate': {'value': {'day': 22, 'month': 3, 'year': 2018}}}}]}, 'timestamp': [{'dateTime': '2018-03-20T18:13:51Z', 'qualification': 'EVENT_CREATION_DATE_TIME'}]}
 ```
 
-2. `convertCDMJsonToAdmlJson` changes the schema from the official CDM to be compatible with the ledger HTTP api. Running this would output the following:
+2. `convertCDMJsonToAdmlJson` changes the schema from the official CDM to be compatible with the ledger HTTP API. Running this would output the following:
 
 ```json
 #### Converting to DAML JSON, wrapping in an 'Event' contract ####
@@ -201,7 +201,7 @@ You should see some output from each step as it's executed, showing the HTTP res
 
 ### Workflow Automation
 
-We now turn to the file `python/bot.py` which shows how to automate workflows. It uses the python [DAZL](https://github.com/lucianojoublanc-da/dazl-client) api to talk directly to the ledger, instead of making HTTP calls. 
+We now turn to the file `python/bot.py` which shows how to automate workflows. It uses the python [DAZL](https://github.com/lucianojoublanc-da/dazl-client) API to talk directly to the ledger, instead of making HTTP calls. 
 
 You'll see the file has two annotated methods, which register callbacks:
 
@@ -247,14 +247,14 @@ Tried to send a command and failed!
 
 The bot checks to see whether it's already greeted each contract (the id should equal "Hello, CDM!" in this case), and if not, it updates it.
 
-Curiously, you'll note that the last line says "Tried to send a command and failed!". Your script may spew a lot of output and go into an infinte loop.
+Curiously, you'll note that the last line says "Tried to send a command and failed!". Your script may spew a lot of output and go into an infinite loop.
 The reason for this is that _both_ our `main.py` and the `bot.py` are racing to update the same contract. To resolve this, comment out the lines related to
 
 ```python
 httpExerciseResponse = exerciseChoice(...)
 ```
 
-in the main script, and change the globaly key in `CashTransfer.json` to something else, to create a unique record:
+in the main script, and change the global key in `CashTransfer.json` to something else, to create a unique record:
 
 ```json
   "meta": {
