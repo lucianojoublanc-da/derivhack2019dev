@@ -8,11 +8,11 @@ export default function Report() {
   const user = useUserState();
   const ledger = useLedgerState();
   const ledgerDispatch = useLedgerDispatch();
-  const events = getContracts(ledger, "Main", "Event");
+  const transfers = getContracts(ledger, "Main", "Transfer");
 
   const exerciseChoice = async (c, whomToGreet) => {
     const command = {
-      templateId: { moduleName: "Main", entityName: "Event" },
+      templateId: { moduleName: "Main", entityName: "Transfer" },
       contractId: c.contractId,
       choice: "SayHello",
       argument: { whomToGreet },
@@ -25,15 +25,15 @@ export default function Report() {
   return (
     <>
       <Contracts
-        contracts={events}
+        contracts={transfers}
         columns={[
           ["ContractId", "contractId"],
-          ["Identifier", "argument.contract.eventIdentifier.0.assignedIdentifier.0.identifier.value"],
-          ["Version", "argument.contract.eventIdentifier.0.assignedIdentifier.0.version"],
-          ["Amount", "argument.contract.primitive.transfer.0.cashTransfer.0.amount.amount"],
-          ["Ccy", "argument.contract.primitive.transfer.0.cashTransfer.0.amount.currency.value"],
-          ["Payer", "argument.contract.primitive.transfer.0.cashTransfer.0.payerReceiver.payerPartyReference.externalReference"],
-          ["Receiver", "argument.contract.primitive.transfer.0.cashTransfer.0.payerReceiver.receiverPartyReference.externalReference"],
+          ["Identifier", "argument.event.eventIdentifier.0.assignedIdentifier.0.identifier.value"],
+          ["Version", "argument.event.eventIdentifier.0.assignedIdentifier.0.version"],
+          ["Amount", "argument.event.primitive.transfer.0.cashTransfer.0.amount.amount"],
+          ["Ccy", "argument.event.primitive.transfer.0.cashTransfer.0.amount.currency.value"],
+          ["Payer", "argument.event.primitive.transfer.0.cashTransfer.0.payerReceiver.payerPartyReference.externalReference"],
+          ["Receiver", "argument.event.primitive.transfer.0.cashTransfer.0.payerReceiver.receiverPartyReference.externalReference"],
         ]}
         actions={[["Say Hello", exerciseChoice, "Whom to greet"]]}
       />

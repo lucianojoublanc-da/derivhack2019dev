@@ -26,7 +26,7 @@ template Transfer
       SayHello : ContractId Transfer 
         with whomToGreet: Text
         do -- Need to project deep field this.contract.eventIdentifier[0].assignedIdentifier[0].value and version
-          create this with event = updateIdentifier "CDM" event
+          create this with event = updateIdentifier whomToGreet event
 
 -- Get Global Key
 getGlobalKey : CDM.Event -> Text
